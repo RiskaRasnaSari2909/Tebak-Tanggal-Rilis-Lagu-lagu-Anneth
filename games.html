@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anneth Song Release Quiz - Canva Slide Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0f172a;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .font-poppins { font-family: 'Poppins', sans-serif; }
+    
+    /* Canva Canvas Slide Container */
+    .canva-slide {
+      background: linear-gradient(135deg, #2d124d 0%, #1e1b4b 50%, #4c1d95 100%);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .glass-option {
+      background: rgba(255, 255, 255, 0.95);
+      color: #1e293b;
+      transition: all 0.25s ease;
+    }
+    .glass-option:hover {
+      transform: translateY(-3px) scale(1.01);
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3);
+    }
+    .glass-option.correct {
+      background-color: #10b981 !important;
+      color: white !important;
+      border-color: #059669 !important;
+    }
+    .glass-option.wrong {
+      background-color: #ef4444 !important;
+      color: white !important;
+      border-color: #dc2626 !important;
+    }
+
+    /* Fade Transition */
+    .slide-enter {
+      animation: slideIn 0.4s forwards cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center p-3 sm:p-6 min-h-screen">
+
+  <div class="w-full max-w-2xl mx-auto">
+    <!-- CANVA PRESENTATION SLIDE -->
+    <div class="canva-slide rounded-3xl p-6 sm:p-10 relative overflow-hidden text-white">
+      
+      <!-- DEKORASI VISUAL CANVA STYLE -->
+      <div class="absolute -top-12 -right-12 w-48 h-48 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <!-- SLIDE 1: COVER / START -->
+      <div id="start-screen" class="quiz-slide slide-enter space-y-6 text-center py-4">
+        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30 px-4 py-1.5 rounded-full text-pink-300 text-xs font-bold uppercase tracking-widest">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Canva Interactive Quiz
+        </div>
+
+        <div class="space-y-3">
+          <h1 class="text-3xl sm:text-5xl font-extrabold font-poppins leading-tight bg-gradient-to-r from-white via-pink-200 to-purple-300 bg-clip-text text-transparent">
+            Tebak Tanggal Rilis Lagu Anneth
+          </h1>
+          <p class="text-gray-300 text-sm max-w-md mx-auto">Uji pengetahuanmu tentang karya-karya Anneth Delliecia! Masukkan nama dan raih skor tertinggi di Leaderboard.</p>
+        </div>
+
+        <!-- INPUT NAMA PEMAIN -->
+        <div class="max-w-sm mx-auto text-left space-y-1.5">
+          <label for="player-name-input" class="block text-xs font-bold text-pink-300 uppercase tracking-wider">Nama / Nickname Kamu:</label>
+          <div class="relative">
+            <i class="fa-solid fa-user-astronaut absolute left-4 top-1/2 -translate-y-1/2 text-purple-400"></i>
+            <input type="text" id="player-name-input" placeholder="Tulis nama kamu..." class="w-full pl-11 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-2xl focus:outline-none focus:border-pink-400 font-semibold text-white text-sm placeholder-gray-400 transition">
+          </div>
+          <p id="name-error" class="text-rose-400 text-xs hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i> Isi namamu dulu sebelum mulai ya!</p>
+        </div>
+
+        <button onclick="startGame()" class="w-full max-w-sm py-4 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-extrabold rounded-2xl text-lg shadow-xl shadow-purple-900/40 transition hover:scale-105 active:scale-95">
+          <i class="fa-solid fa-play mr-2"></i> Mulai Kuis
+        </button>
+      </div>
+
+      <!-- SLIDE 2: QUIZ / PERTANYAAN -->
+      <div id="quiz-screen" class="quiz-slide space-y-6 hidden">
+        <!-- HEADER SLIDE STATS -->
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-purple-300 uppercase">Slide Soal</span>
+            <span id="question-number" class="text-base font-extrabold text-white bg-purple-500/30 px-3 py-1 rounded-lg border border-purple-400/30">1/10</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="bg-amber-500/20 px-3 py-1 rounded-lg border border-amber-500/30 text-amber-300 font-bold text-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-star"></i> <span id="score-display">0 Poin</span>
+            </div>
+            <div class="bg-rose-500/20 px-3 py-1 rounded-lg border border-rose-500/30 text-rose-300 font-bold text-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-clock"></i> <span id="timer-display">15s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIMER PROGRESS BAR -->
+        <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+          <div id="timer-bar" class="bg-gradient-to-r from-pink-500 to-purple-400 h-full w-full transition-all linear duration-1000"></div>
+        </div>
+
+        <!-- SOAL CARD -->
+        <div class="glass-card p-5 sm:p-6 rounded-2xl space-y-2">
+          <span id="song-album" class="text-xs font-bold text-pink-400 uppercase tracking-widest">Single Release</span>
+          <h2 id="song-title" class="text-2xl sm:text-3xl font-extrabold text-white font-poppins">"Mungkin Hari Ini Esok Atau Nanti"</h2>
+          <p class="text-gray-300 text-xs sm:text-sm">Kapan lagu ini resmi dirilis?</p>
+        </div>
+
+        <!-- PILIHAN JAWABAN -->
+        <div id="options-container" class="grid grid-cols-1 gap-3"></div>
+
+        <!-- TRIVIA SLIDE POPUP -->
+        <div id="trivia-box" class="bg-purple-900/50 border border-purple-400/30 rounded-2xl p-4 hidden space-y-1">
+          <div class="text-pink-300 font-bold text-xs uppercase flex items-center gap-1.5">
+            <i class="fa-solid fa-lightbulb"></i> Fun Fact / Trivia:
+          </div>
+          <p id="trivia-text" class="text-xs text-gray-200 leading-relaxed"></p>
+        </div>
+
+        <button id="next-btn" onclick="nextQuestion()" class="w-full py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-extrabold rounded-2xl shadow-lg hidden transition">
+          Lanjut ke Soal Berikutnya <i class="fa-solid fa-arrow-right ml-2"></i>
+        </button>
+      </div>
+
+      <!-- SLIDE 3: HASIL & LEADERBOARD -->
+      <div id="result-screen" class="quiz-slide space-y-6 text-center py-4 hidden">
+        <div class="w-20 h-20 bg-gradient-to-tr from-amber-400 to-pink-500 rounded-3xl flex items-center justify-center mx-auto shadow-xl text-3xl">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+
+        <div class="space-y-1">
+          <h2 class="text-3xl font-black font-poppins text-white">Hasil Permainan</h2>
+          <p id="player-display-name" class="text-pink-300 font-bold text-base"></p>
+          <p id="result-message" class="text-gray-300 text-sm max-w-xs mx-auto"></p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+          <div class="glass-card p-4 rounded-2xl">
+            <span class="text-xs text-gray-400 font-semibold uppercase">Total Skor</span>
+            <div id="final-score" class="text-3xl font-black text-pink-400 mt-1">0</div>
+          </div>
+          <div class="glass-card p-4 rounded-2xl">
+            <span class="text-xs text-gray-400 font-semibold uppercase">Benar</span>
+            <div id="final-accuracy" class="text-3xl font-black text-emerald-400 mt-1">0/10</div>
+          </div>
+        </div>
+
+        <div id="sheet-status-box" class="glass-card p-3 rounded-xl max-w-sm mx-auto">
+          <p id="sheet-status" class="text-xs text-gray-300">Menyiapkan pengiriman data skor...</p>
+        </div>
+
+        <button onclick="startGame()" class="w-full max-w-sm py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow-lg transition">
+          <i class="fa-solid fa-rotate-right mr-2"></i> Main Lagi
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // URL GOOGLE APPS SCRIPT
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoNUD65052bht-PWgOMARYbf3XnbLyfrylufC-VvDMNJz7gmS02WGDU8NntMuK7rPoKg/exec";
+
+    const quizData = [
+      {
+        title: "Tetap Untukmu",
+        album: "Single Perdana",
+        correct: "28 Agustus 2019",
+        options: ["28 Agustus 2019", "15 Juli 2019", "18 Oktober 2019", "12 Desember 2019"],
+        trivia: "Debut single solo perdana Anneth usai menjuarai Indonesian Idol Junior musim ketiga!"
+      },
+      {
+        title: "Mungkin Hari Ini Esok Atau Nanti",
+        album: "And The Story Begins",
+        correct: "18 Oktober 2020",
+        options: ["18 Oktober 2020", "28 Agustus 2020", "15 November 2020", "01 Januari 2021"],
+        trivia: "Dirilis tepat saat ulang tahun Anneth ke-15! Ditulis sendiri oleh Anneth dan memborong piala AMI Awards."
+      },
+      {
+        title: "Should I (feat. Zara Leola)",
+        album: "Single Duet",
+        correct: "11 Desember 2020",
+        options: ["11 Desember 2020", "18 Oktober 2020", "14 Februari 2021", "20 November 2020"],
+        trivia: "Lagu kolaborasi manis antara Anneth dan Zara Leola tentang keraguan perasaan remaja."
+      },
+      {
+        title: "Jatuh Sejatuh-Jatuhnya",
+        album: "Single Release",
+        correct: "23 Mei 2025",
+        options: ["23 Mei 2025", "18 Oktober 2024", "15 April 2025", "10 Juni 2025"],
+        trivia: "Single bernuansa medium up-beat Anneth tentang rasa cinta dan ketulusan mendalam."
+      },
+      {
+        title: "Bakti",
+        album: "OST. Kadet 1947",
+        correct: "09 November 2021",
+        options: ["09 November 2021", "17 Agustus 2021", "10 November 2021", "25 Desember 2021"],
+        trivia: "Lagu emosional ciptaan Melly Goeslaw yang dibawakan Anneth untuk OST film Kadet 1947."
+      },
+      {
+        title: "Takkan Berhenti Mencintaimu",
+        album: "And The Story Begins",
+        correct: "08 Desember 2021",
+        options: ["08 Desember 2021", "18 Oktober 2021", "14 Februari 2022", "01 November 2021"],
+        trivia: "Single romantis menyentuh dari album solo perdana 'And The Story Begins'."
+      },
+      {
+        title: "Sampai Kapan (Jaga Hati Untukmu)",
+        album: "Single Release",
+        correct: "18 Juli 2022",
+        options: ["18 Juli 2022", "18 Oktober 2022", "01 Juni 2022", "20 Agustus 2022"],
+        trivia: "MV lagu ini rilis di channel YouTube RANS Music dan sempat menduduki jajaran trending!"
+      },
+      {
+        title: "MEMAR (Meski Masih Ada Rasa)",
+        album: "Single Release",
+        correct: "18 Oktober 2023",
+        options: ["18 Oktober 2023", "28 Agustus 2023", "18 November 2023", "12 Oktober 2023"],
+        trivia: "Rilis spesial tepat di ulang tahun Anneth ke-18, pada tanggal 18 Oktober jam 18.18 WIB!"
+      },
+      {
+        title: "Pandai Bicara",
+        album: "Single Release",
+        correct: "22 Februari 2024",
+        options: ["22 Februari 2024", "18 Oktober 2023", "14 Maret 2024", "10 Januari 2024"],
+        trivia: "Single hits Anneth di awal tahun 2024 dengan lirik puitis tentang dinamika hubungan."
+      },
+      {
+        title: "Sampai Bertemu Lagi",
+        album: "Single Release",
+        correct: "10 Oktober 2024",
+        options: ["10 Oktober 2024", "18 Oktober 2024", "22 Agustus 2024", "01 November 2024"],
+        trivia: "Lagu perpisahan manis nan emosional persembahan indah dari Anneth untuk para fans."
+      }
+    ];
+
+    let currentQuestion = 0, score = 0, correctCount = 0, timer = null, timeLeft = 15, answered = false, playerName = "";
+
+    function startGame() {
+      const nameInput = document.getElementById('player-name-input');
+      const nameError = document.getElementById('name-error');
+
+      if (!nameInput.value.trim()) {
+        nameError.classList.remove('hidden');
+        nameInput.focus();
+        return;
+      }
+      nameError.classList.add('hidden');
+      playerName = nameInput.value.trim();
+
+      currentQuestion = 0; score = 0; correctCount = 0;
+      
+      // Sembunyikan semua layar terlebih dahulu
+      document.querySelectorAll('.quiz-slide').forEach(s => s.classList.add('hidden'));
+      
+      // Tampilkan layar kuis
+      showSlide('quiz-screen');
+      loadQuestion();
+    }
+
+    function showSlide(toId) {
+      const toSlide = document.getElementById(toId);
+      toSlide.classList.remove('hidden');
+      toSlide.classList.add('slide-enter');
+    }
+
+    function switchSlide(fromId, toId) {
+      document.getElementById(fromId).classList.add('hidden');
+      showSlide(toId);
+    }
+
+    function loadQuestion() {
+      answered = false;
+      const data = quizData[currentQuestion];
+      
+      document.getElementById('question-number').innerText = `${currentQuestion + 1}/${quizData.length}`;
+      document.getElementById('score-display').innerText = `${score} Poin`;
+      document.getElementById('song-album').innerText = data.album;
+      document.getElementById('song-title').innerText = `"${data.title}"`;
+      document.getElementById('trivia-box').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+
+      const shuffled = [...data.options].sort(() => Math.random() - 0.5);
+      shuffled.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'glass-option w-full py-3.5 px-5 text-left rounded-2xl font-bold flex justify-between items-center shadow-md';
+        btn.innerHTML = `<span>${opt}</span> <i class="fa-regular fa-circle text-gray-400"></i>`;
+        btn.onclick = () => selectOption(btn, opt);
+        container.appendChild(btn);
+      });
+
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timeLeft = 15;
+      updateTimerUI();
+
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          timeOut();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      document.getElementById('timer-display').innerText = `${timeLeft}s`;
+      document.getElementById('timer-bar').style.width = `${(timeLeft / 15) * 100}%`;
+    }
+
+    function selectOption(selectedBtn, selectedValue) {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+
+      const data = quizData[currentQuestion];
+      const buttons = document.querySelectorAll('.glass-option');
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selectedValue === data.correct) {
+        selectedBtn.classList.add('correct');
+        selectedBtn.querySelector('i').className = 'fa-solid fa-circle-check text-white';
+        score += (10 + timeLeft * 2);
+        correctCount++;
+      } else {
+        selectedBtn.classList.add('wrong');
+        selectedBtn.querySelector('i').className = 'fa-solid fa-circle-xmark text-white';
+        buttons.forEach(btn => {
+          const optText = btn.querySelector('span').innerText.trim();
+          if (optText === data.correct) {
+            btn.classList.add('correct');
+            btn.querySelector('i').className = 'fa-solid fa-circle-check text-white';
+          }
+        });
+      }
+
+      document.getElementById('score-display').innerText = `${score} Poin`;
+      showTrivia(data.trivia);
+    }
+
+    function timeOut() {
+      if (answered) return;
+      answered = true;
+      const data = quizData[currentQuestion];
+      const buttons = document.querySelectorAll('.glass-option');
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        const optText = btn.querySelector('span').innerText.trim();
+        if (optText === data.correct) {
+          btn.classList.add('correct');
+          btn.querySelector('i').className = 'fa-solid fa-circle-check text-white';
+        }
+      });
+
+      showTrivia("Waktu habis! " + data.trivia);
+    }
+
+    function showTrivia(text) {
+      document.getElementById('trivia-text').innerText = text;
+      document.getElementById('trivia-box').classList.remove('hidden');
+      
+      const nextBtn = document.getElementById('next-btn');
+      nextBtn.innerHTML = currentQuestion < quizData.length - 1 
+        ? 'Lanjut Soal Berikutnya <i class="fa-solid fa-arrow-right ml-2"></i>' 
+        : 'Lihat Hasil Akhir <i class="fa-solid fa-trophy ml-2"></i>';
+      nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      switchSlide('quiz-screen', 'result-screen');
+      document.getElementById('player-display-name').innerText = `Pemain: ${playerName}`;
+      document.getElementById('final-score').innerText = score;
+      document.getElementById('final-accuracy').innerText = `${correctCount}/${quizData.length}`;
+
+      const msg = document.getElementById('result-message');
+      if (correctCount === 10) msg.innerText = "Sempurna! Kamu Annetherz Level Murni 100%! 🎉";
+      else if (correctCount >= 7) msg.innerText = "Keren banget! Pengetahuan lagu Anneth kamu top banget! 👏";
+      else if (correctCount >= 4) msg.innerText = "Lumayan bagus! Yuk dengerin lagi lagu-lagu Anneth! 🎵";
+      else msg.innerText = "Tetap semangat! Coba main lagi yuk! 💪";
+
+      kirimSkorKeSheets(playerName, score);
+    }
+
+    function kirimSkorKeSheets(nama, skor) {
+      const statusEl = document.getElementById('sheet-status');
+      
+      if (!SCRIPT_URL || SCRIPT_URL.trim() === "") {
+        statusEl.innerHTML = "<span class='text-amber-400 font-semibold'><i class='fa-solid fa-triangle-exclamation'></i> URL Apps Script belum dipasang.</span>";
+        return;
+      }
+
+      statusEl.innerHTML = "<span class='text-purple-300'><i class='fa-solid fa-spinner fa-spin mr-1'></i> Mengirim skor ke Google Sheets...</span>";
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nama: nama, skor: skor })
+      })
+      .then(() => {
+        statusEl.innerHTML = "<span class='text-emerald-400 font-bold'><i class='fa-solid fa-circle-check mr-1'></i> Skor berhasil tersimpan di Google Sheets!</span>";
+      })
+      .catch(err => {
+        statusEl.innerHTML = "<span class='text-rose-400 font-semibold'><i class='fa-solid fa-circle-xmark mr-1'></i> Gagal mengirim skor.</span>";
+      });
+    }
+  </script>
+</body>
+</html>
